@@ -1,0 +1,941 @@
+[gd_scene load_steps=62 format=2]
+
+[ext_resource path="res://Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://LightFlicker.gd" type="Script" id=2]
+[ext_resource path="res://Camera.gd" type="Script" id=3]
+[ext_resource path="res://Assets/fnaf-test-layout.obj" type="ArrayMesh" id=4]
+[ext_resource path="res://Vignette.gd" type="Script" id=5]
+[ext_resource path="res://Light.gd" type="Script" id=6]
+[ext_resource path="res://LightFlicker2.gd" type="Script" id=7]
+[ext_resource path="res://Main.gd" type="Script" id=8]
+[ext_resource path="res://Viewport.gd" type="Script" id=9]
+[ext_resource path="res://Clock.gd" type="Script" id=10]
+[ext_resource path="res://Power.gd" type="Script" id=11]
+[ext_resource path="res://Usage.gd" type="Script" id=12]
+[ext_resource path="res://Shock.gd" type="Script" id=13]
+[ext_resource path="res://Audio/cam-change.mp3" type="AudioStream" id=14]
+[ext_resource path="res://Audio/light-buzz.mp3" type="AudioStream" id=15]
+[ext_resource path="res://Animatronic.gd" type="Script" id=16]
+[ext_resource path="res://BabyBunny.gd" type="Script" id=17]
+[ext_resource path="res://VentLight.gd" type="Script" id=18]
+[ext_resource path="res://Audio/cam-open.mp3" type="AudioStream" id=19]
+[ext_resource path="res://Audio/cam-close.mp3" type="AudioStream" id=20]
+[ext_resource path="res://Assets/baby-bunny.obj" type="ArrayMesh" id=21]
+[ext_resource path="res://Audio/jumpscare.mp3" type="AudioStream" id=22]
+[ext_resource path="res://Agro.gd" type="Script" id=23]
+[ext_resource path="res://Audio/jumpscare-2.mp3" type="AudioStream" id=24]
+[ext_resource path="res://ResetDanger.gd" type="Script" id=25]
+[ext_resource path="res://Audio/ambience1.mp3" type="AudioStream" id=26]
+[ext_resource path="res://Audio/footsteps-4.mp3" type="AudioStream" id=27]
+[ext_resource path="res://Assets/brownie.obj" type="ArrayMesh" id=28]
+[ext_resource path="res://Brownie.gd" type="Script" id=29]
+[ext_resource path="res://Assets/rexy.obj" type="ArrayMesh" id=30]
+[ext_resource path="res://Rexy.gd" type="Script" id=31]
+[ext_resource path="res://Assets/exploding-tnt.obj" type="ArrayMesh" id=32]
+[ext_resource path="res://Exploded.gd" type="Script" id=33]
+[ext_resource path="res://Audio/vent-entry.mp3" type="AudioStream" id=34]
+[ext_resource path="res://Audio/message.wav" type="AudioStream" id=35]
+[ext_resource path="res://Audio/ring.mp3" type="AudioStream" id=36]
+[ext_resource path="res://Audio.gd" type="Script" id=37]
+[ext_resource path="res://Report.gd" type="Script" id=38]
+[ext_resource path="res://Audio/click.mp3" type="AudioStream" id=39]
+[ext_resource path="res://Audio/error.mp3" type="AudioStream" id=40]
+
+[sub_resource type="Environment" id=3]
+background_mode = 1
+background_energy = 16.0
+ambient_light_color = Color( 0.686275, 0.686275, 0.686275, 1 )
+
+[sub_resource type="SpatialMaterial" id=4]
+albedo_color = Color( 0.196078, 0.196078, 0.196078, 1 )
+
+[sub_resource type="BoxShape" id=5]
+
+[sub_resource type="Shader" id=13]
+code = "shader_type canvas_item;
+
+uniform vec4 color: hint_color;
+uniform float multi = 0.2;
+uniform float softness = 0.9;
+
+void fragment() {
+	float value = distance(UV, vec2(0.5));
+	COLOR = vec4(color.rgb, smoothstep(multi, softness, value));
+}"
+
+[sub_resource type="ShaderMaterial" id=14]
+shader = SubResource( 13 )
+shader_param/color = Color( 0.0313726, 0.0313726, 0.0313726, 1 )
+shader_param/multi = 0.0
+shader_param/softness = 0.5
+
+[sub_resource type="ConcavePolygonShape" id=6]
+data = PoolVector3Array( -14.75, 25, -129.25, -14.75, 25, -170.75, -14.75, 4.5, -170.75, -14.75, 25, -129.25, -14.75, 4.5, -170.75, -14.75, 4.5, -129.25, -14.75, 25, -129.25, -18, 25, -129.25, -18, 25, -170.75, -14.75, 25, -129.25, -18, 25, -170.75, -14.75, 25, -170.75, -18, 25, -129.25, -14.75, 25, -129.25, -14.75, 4.5, -129.25, -18, 25, -129.25, -14.75, 4.5, -129.25, -18, 4.5, -129.25, -18, 25, -170.75, -18, 25, -129.25, -18, 4.5, -129.25, -18, 25, -170.75, -18, 4.5, -129.25, -18, 4.5, -170.75, -14.75, 4.5, -170.75, -18, 4.5, -170.75, -18, 4.5, -129.25, -14.75, 4.5, -170.75, -18, 4.5, -129.25, -14.75, 4.5, -129.25, -14.75, 25, -170.75, -18, 25, -170.75, -18, 4.5, -170.75, -14.75, 25, -170.75, -18, 4.5, -170.75, -14.75, 4.5, -170.75, 41.75, 25, -129.25, 41.75, 25, -134, 41.75, 4.5, -134, 41.75, 25, -129.25, 41.75, 4.5, -134, 41.75, 4.5, -129.25, 41.75, 25, -129.25, -18, 25, -129.25, -18, 25, -134, 41.75, 25, -129.25, -18, 25, -134, 41.75, 25, -134, -18, 25, -129.25, 41.75, 25, -129.25, 41.75, 4.5, -129.25, -18, 25, -129.25, 41.75, 4.5, -129.25, -18, 4.5, -129.25, -18, 25, -134, -18, 25, -129.25, -18, 4.5, -129.25, -18, 25, -134, -18, 4.5, -129.25, -18, 4.5, -134, 41.75, 4.5, -134, -18, 4.5, -134, -18, 4.5, -129.25, 41.75, 4.5, -134, -18, 4.5, -129.25, 41.75, 4.5, -129.25, 41.75, 25, -134, -18, 25, -134, -18, 4.5, -134, 41.75, 25, -134, -18, 4.5, -134, 41.75, 4.5, -134, 62.25, 25, -103.5, 62.25, 25, -157, 62.25, 4.5, -157, 62.25, 25, -103.5, 62.25, 4.5, -157, 62.25, 4.5, -103.5, 62.25, 25, -103.5, 59.5, 25, -103.5, 59.5, 25, -157, 62.25, 25, -103.5, 59.5, 25, -157, 62.25, 25, -157, 59.5, 25, -103.5, 62.25, 25, -103.5, 62.25, 4.5, -103.5, 59.5, 25, -103.5, 62.25, 4.5, -103.5, 59.5, 4.5, -103.5, 59.5, 25, -157, 59.5, 25, -103.5, 59.5, 4.5, -103.5, 59.5, 25, -157, 59.5, 4.5, -103.5, 59.5, 4.5, -157, 62.25, 4.5, -157, 59.5, 4.5, -157, 59.5, 4.5, -103.5, 62.25, 4.5, -157, 59.5, 4.5, -103.5, 62.25, 4.5, -103.5, 62.25, 25, -157, 59.5, 25, -157, 59.5, 4.5, -157, 62.25, 25, -157, 59.5, 4.5, -157, 62.25, 4.5, -157, 12, 25, -63.75, 12, 25, -64, 12, 12.5, -64, 12, 25, -63.75, 12, 12.5, -64, 12, 12.5, -63.75, 12, 25, -63.75, -24.5, 25, -63.75, -24.5, 25, -64, 12, 25, -63.75, -24.5, 25, -64, 12, 25, -64, -24.5, 25, -63.75, 12, 25, -63.75, 12, 12.5, -63.75, -24.5, 25, -63.75, 12, 12.5, -63.75, -24.5, 12.5, -63.75, -24.5, 25, -64, -24.5, 25, -63.75, -24.5, 12.5, -63.75, -24.5, 25, -64, -24.5, 12.5, -63.75, -24.5, 12.5, -64, 12, 12.5, -64, -24.5, 12.5, -64, -24.5, 12.5, -63.75, 12, 12.5, -64, -24.5, 12.5, -63.75, 12, 12.5, -63.75, 12, 25, -64, -24.5, 25, -64, -24.5, 12.5, -64, 12, 25, -64, -24.5, 12.5, -64, 12, 12.5, -64, -51, 25, -147, -51, 25, -150, -51, 4.5, -150, -51, 25, -147, -51, 4.5, -150, -51, 4.5, -147, -51, 25, -147, -70, 25, -147, -70, 25, -150, -51, 25, -147, -70, 25, -150, -51, 25, -150, -70, 25, -147, -51, 25, -147, -51, 4.5, -147, -70, 25, -147, -51, 4.5, -147, -70, 4.5, -147, -70, 25, -150, -70, 25, -147, -70, 4.5, -147, -70, 25, -150, -70, 4.5, -147, -70, 4.5, -150, -51, 4.5, -150, -70, 4.5, -150, -70, 4.5, -147, -51, 4.5, -150, -70, 4.5, -147, -51, 4.5, -147, -51, 25, -150, -70, 25, -150, -70, 4.5, -150, -51, 25, -150, -70, 4.5, -150, -51, 4.5, -150, -12, 4.5, -146.25, -12, 4.5, -171.5, -12, 1, -171.5, -12, 4.5, -146.25, -12, 1, -171.5, -12, 1, -146.25, -12, 4.5, -146.25, -71, 4.5, -146.25, -71, 4.5, -171.5, -12, 4.5, -146.25, -71, 4.5, -171.5, -12, 4.5, -171.5, -71, 4.5, -146.25, -12, 4.5, -146.25, -12, 1, -146.25, -71, 4.5, -146.25, -12, 1, -146.25, -71, 1, -146.25, -71, 4.5, -171.5, -71, 4.5, -146.25, -71, 1, -146.25, -71, 4.5, -171.5, -71, 1, -146.25, -71, 1, -171.5, -12, 1, -171.5, -71, 1, -171.5, -71, 1, -146.25, -12, 1, -171.5, -71, 1, -146.25, -12, 1, -146.25, -12, 4.5, -171.5, -71, 4.5, -171.5, -71, 1, -171.5, -12, 4.5, -171.5, -71, 1, -171.5, -12, 1, -171.5, 19.25, 16.75, 25, 19.25, 16.75, 23, 19.25, 1, 23, 19.25, 16.75, 25, 19.25, 1, 23, 19.25, 1, 25, 19.25, 16.75, 25, -35.25, 16.75, 25, -35.25, 16.75, 23, 19.25, 16.75, 25, -35.25, 16.75, 23, 19.25, 16.75, 23, -35.25, 16.75, 25, 19.25, 16.75, 25, 19.25, 1, 25, -35.25, 16.75, 25, 19.25, 1, 25, -35.25, 1, 25, -35.25, 16.75, 23, -35.25, 16.75, 25, -35.25, 1, 25, -35.25, 16.75, 23, -35.25, 1, 25, -35.25, 1, 23, 19.25, 1, 23, -35.25, 1, 23, -35.25, 1, 25, 19.25, 1, 23, -35.25, 1, 25, 19.25, 1, 25, 19.25, 16.75, 23, -35.25, 16.75, 23, -35.25, 1, 23, 19.25, 16.75, 23, -35.25, 1, 23, 19.25, 1, 23, -24, 25, -63.75, -24, 25, -64, -24, 4.5, -64, -24, 25, -63.75, -24, 4.5, -64, -24, 4.5, -63.75, -24, 25, -63.75, -29.75, 25, -63.75, -29.75, 25, -64, -24, 25, -63.75, -29.75, 25, -64, -24, 25, -64, -29.75, 25, -63.75, -24, 25, -63.75, -24, 4.5, -63.75, -29.75, 25, -63.75, -24, 4.5, -63.75, -29.75, 4.5, -63.75, -29.75, 25, -64, -29.75, 25, -63.75, -29.75, 4.5, -63.75, -29.75, 25, -64, -29.75, 4.5, -63.75, -29.75, 4.5, -64, -24, 4.5, -64, -29.75, 4.5, -64, -29.75, 4.5, -63.75, -24, 4.5, -64, -29.75, 4.5, -63.75, -24, 4.5, -63.75, -24, 25, -64, -29.75, 25, -64, -29.75, 4.5, -64, -24, 25, -64, -29.75, 4.5, -64, -24, 4.5, -64, -67.25, 25, -147, -67.25, 25, -171.25, -67.25, 4.5, -171.25, -67.25, 25, -147, -67.25, 4.5, -171.25, -67.25, 4.5, -147, -67.25, 25, -147, -70, 25, -147, -70, 25, -171.25, -67.25, 25, -147, -70, 25, -171.25, -67.25, 25, -171.25, -70, 25, -147, -67.25, 25, -147, -67.25, 4.5, -147, -70, 25, -147, -67.25, 4.5, -147, -70, 4.5, -147, -70, 25, -171.25, -70, 25, -147, -70, 4.5, -147, -70, 25, -171.25, -70, 4.5, -147, -70, 4.5, -171.25, -67.25, 4.5, -171.25, -70, 4.5, -171.25, -70, 4.5, -147, -67.25, 4.5, -171.25, -70, 4.5, -147, -67.25, 4.5, -147, -67.25, 25, -171.25, -70, 25, -171.25, -70, 4.5, -171.25, -67.25, 25, -171.25, -70, 4.5, -171.25, -67.25, 4.5, -171.25, 17.75, 25, -63.75, 17.75, 25, -64, 17.75, 4.5, -64, 17.75, 25, -63.75, 17.75, 4.5, -64, 17.75, 4.5, -63.75, 17.75, 25, -63.75, 12, 25, -63.75, 12, 25, -64, 17.75, 25, -63.75, 12, 25, -64, 17.75, 25, -64, 12, 25, -63.75, 17.75, 25, -63.75, 17.75, 4.5, -63.75, 12, 25, -63.75, 17.75, 4.5, -63.75, 12, 4.5, -63.75, 12, 25, -64, 12, 25, -63.75, 12, 4.5, -63.75, 12, 25, -64, 12, 4.5, -63.75, 12, 4.5, -64, 17.75, 4.5, -64, 12, 4.5, -64, 12, 4.5, -63.75, 17.75, 4.5, -64, 12, 4.5, -63.75, 17.75, 4.5, -63.75, 17.75, 25, -64, 12, 25, -64, 12, 4.5, -64, 17.75, 25, -64, 12, 4.5, -64, 17.75, 4.5, -64, -13, 25, -170.5, -13, 25, -173.5, -13, 4.5, -173.5, -13, 25, -170.5, -13, 4.5, -173.5, -13, 4.5, -170.5, -13, 25, -170.5, -70, 25, -170.5, -70, 25, -173.5, -13, 25, -170.5, -70, 25, -173.5, -13, 25, -173.5, -70, 25, -170.5, -13, 25, -170.5, -13, 4.5, -170.5, -70, 25, -170.5, -13, 4.5, -170.5, -70, 4.5, -170.5, -70, 25, -173.5, -70, 25, -170.5, -70, 4.5, -170.5, -70, 25, -173.5, -70, 4.5, -170.5, -70, 4.5, -173.5, -13, 4.5, -173.5, -70, 4.5, -173.5, -70, 4.5, -170.5, -13, 4.5, -173.5, -70, 4.5, -170.5, -13, 4.5, -170.5, -13, 25, -173.5, -70, 25, -173.5, -70, 4.5, -173.5, -13, 25, -173.5, -70, 4.5, -173.5, -13, 4.5, -173.5, 62.25, 25, -101.5, 62.25, 25, -157, 62.25, 22.25, -157, 62.25, 25, -101.5, 62.25, 22.25, -157, 62.25, 22.25, -101.5, 62.25, 25, -101.5, 41.75, 25, -101.5, 41.75, 25, -157, 62.25, 25, -101.5, 41.75, 25, -157, 62.25, 25, -157, 41.75, 25, -101.5, 62.25, 25, -101.5, 62.25, 22.25, -101.5, 41.75, 25, -101.5, 62.25, 22.25, -101.5, 41.75, 22.25, -101.5, 41.75, 25, -157, 41.75, 25, -101.5, 41.75, 22.25, -101.5, 41.75, 25, -157, 41.75, 22.25, -101.5, 41.75, 22.25, -157, 62.25, 22.25, -157, 41.75, 22.25, -157, 41.75, 22.25, -101.5, 62.25, 22.25, -157, 41.75, 22.25, -101.5, 62.25, 22.25, -101.5, 62.25, 25, -157, 41.75, 25, -157, 41.75, 22.25, -157, 62.25, 25, -157, 41.75, 22.25, -157, 62.25, 22.25, -157, 4, 12.5, -63.75, 4, 12.5, -64, 4, 4.5, -64, 4, 12.5, -63.75, 4, 4.5, -64, 4, 4.5, -63.75, 4, 12.5, -63.75, -16.5, 12.5, -63.75, -16.5, 12.5, -64, 4, 12.5, -63.75, -16.5, 12.5, -64, 4, 12.5, -64, -16.5, 12.5, -63.75, 4, 12.5, -63.75, 4, 4.5, -63.75, -16.5, 12.5, -63.75, 4, 4.5, -63.75, -16.5, 4.5, -63.75, -16.5, 12.5, -64, -16.5, 12.5, -63.75, -16.5, 4.5, -63.75, -16.5, 12.5, -64, -16.5, 4.5, -63.75, -16.5, 4.5, -64, 4, 4.5, -64, -16.5, 4.5, -64, -16.5, 4.5, -63.75, 4, 4.5, -64, -16.5, 4.5, -63.75, 4, 4.5, -63.75, 4, 12.5, -64, -16.5, 12.5, -64, -16.5, 4.5, -64, 4, 12.5, -64, -16.5, 4.5, -64, 4, 4.5, -64, -24, 12.5, -26.5, -24, 12.5, -63.75, -24, 4.5, -63.75, -24, 12.5, -26.5, -24, 4.5, -63.75, -24, 4.5, -26.5, -24, 12.5, -26.5, -29.75, 12.5, -26.5, -29.75, 12.5, -63.75, -24, 12.5, -26.5, -29.75, 12.5, -63.75, -24, 12.5, -63.75, -29.75, 12.5, -26.5, -24, 12.5, -26.5, -24, 4.5, -26.5, -29.75, 12.5, -26.5, -24, 4.5, -26.5, -29.75, 4.5, -26.5, -29.75, 12.5, -63.75, -29.75, 12.5, -26.5, -29.75, 4.5, -26.5, -29.75, 12.5, -63.75, -29.75, 4.5, -26.5, -29.75, 4.5, -63.75, -24, 4.5, -63.75, -29.75, 4.5, -63.75, -29.75, 4.5, -26.5, -24, 4.5, -63.75, -29.75, 4.5, -26.5, -24, 4.5, -26.5, -24, 12.5, -63.75, -29.75, 12.5, -63.75, -29.75, 4.5, -63.75, -24, 12.5, -63.75, -29.75, 4.5, -63.75, -24, 4.5, -63.75, 17.75, 12.5, -26.5, 17.75, 12.5, -63.75, 17.75, 4.5, -63.75, 17.75, 12.5, -26.5, 17.75, 4.5, -63.75, 17.75, 4.5, -26.5, 17.75, 12.5, -26.5, 12, 12.5, -26.5, 12, 12.5, -63.75, 17.75, 12.5, -26.5, 12, 12.5, -63.75, 17.75, 12.5, -63.75, 12, 12.5, -26.5, 17.75, 12.5, -26.5, 17.75, 4.5, -26.5, 12, 12.5, -26.5, 17.75, 4.5, -26.5, 12, 4.5, -26.5, 12, 12.5, -63.75, 12, 12.5, -26.5, 12, 4.5, -26.5, 12, 12.5, -63.75, 12, 4.5, -26.5, 12, 4.5, -63.75, 17.75, 4.5, -63.75, 12, 4.5, -63.75, 12, 4.5, -26.5, 17.75, 4.5, -63.75, 12, 4.5, -26.5, 17.75, 4.5, -26.5, 17.75, 12.5, -63.75, 12, 12.5, -63.75, 12, 4.5, -63.75, 17.75, 12.5, -63.75, 12, 4.5, -63.75, 17.75, 4.5, -63.75, 17.75, 2, 30.5, 17.75, 2, -29.25, 17.75, 1, -29.25, 17.75, 2, 30.5, 17.75, 1, -29.25, 17.75, 1, 30.5, 17.75, 2, 30.5, -29.75, 2, 30.5, -29.75, 2, -29.25, 17.75, 2, 30.5, -29.75, 2, -29.25, 17.75, 2, -29.25, -29.75, 2, 30.5, 17.75, 2, 30.5, 17.75, 1, 30.5, -29.75, 2, 30.5, 17.75, 1, 30.5, -29.75, 1, 30.5, -29.75, 2, -29.25, -29.75, 2, 30.5, -29.75, 1, 30.5, -29.75, 2, -29.25, -29.75, 1, 30.5, -29.75, 1, -29.25, 17.75, 1, -29.25, -29.75, 1, -29.25, -29.75, 1, 30.5, 17.75, 1, -29.25, -29.75, 1, 30.5, 17.75, 1, 30.5, 17.75, 2, -29.25, -29.75, 2, -29.25, -29.75, 1, -29.25, 17.75, 2, -29.25, -29.75, 1, -29.25, 17.75, 1, -29.25, 41.75, 4.5, -26.5, 41.75, 4.5, -146.25, 41.75, 1, -146.25, 41.75, 4.5, -26.5, 41.75, 1, -146.25, 41.75, 1, -26.5, 41.75, 4.5, -26.5, -54, 4.5, -26.5, -54, 4.5, -146.25, 41.75, 4.5, -26.5, -54, 4.5, -146.25, 41.75, 4.5, -146.25, -54, 4.5, -26.5, 41.75, 4.5, -26.5, 41.75, 1, -26.5, -54, 4.5, -26.5, 41.75, 1, -26.5, -54, 1, -26.5, -54, 4.5, -146.25, -54, 4.5, -26.5, -54, 1, -26.5, -54, 4.5, -146.25, -54, 1, -26.5, -54, 1, -146.25, 41.75, 1, -146.25, -54, 1, -146.25, -54, 1, -26.5, 41.75, 1, -146.25, -54, 1, -26.5, 41.75, 1, -26.5, 41.75, 4.5, -146.25, -54, 4.5, -146.25, -54, 1, -146.25, 41.75, 4.5, -146.25, -54, 1, -146.25, 41.75, 1, -146.25, -29.5, 17, 25.75, -29.5, 17, -29.25, -29.5, 1, -29.25, -29.5, 17, 25.75, -29.5, 1, -29.25, -29.5, 1, 25.75, -29.5, 17, 25.75, -32, 17, 25.75, -32, 17, -29.25, -29.5, 17, 25.75, -32, 17, -29.25, -29.5, 17, -29.25, -32, 17, 25.75, -29.5, 17, 25.75, -29.5, 1, 25.75, -32, 17, 25.75, -29.5, 1, 25.75, -32, 1, 25.75, -32, 17, -29.25, -32, 17, 25.75, -32, 1, 25.75, -32, 17, -29.25, -32, 1, 25.75, -32, 1, -29.25, -29.5, 1, -29.25, -32, 1, -29.25, -32, 1, 25.75, -29.5, 1, -29.25, -32, 1, 25.75, -29.5, 1, 25.75, -29.5, 17, -29.25, -32, 17, -29.25, -32, 1, -29.25, -29.5, 17, -29.25, -32, 1, -29.25, -29.5, 1, -29.25, 17.75, 25, -26.5, 17.75, 25, -63.75, 17.75, 12.5, -63.75, 17.75, 25, -26.5, 17.75, 12.5, -63.75, 17.75, 12.5, -26.5, 17.75, 25, -26.5, -29.75, 25, -26.5, -29.75, 25, -63.75, 17.75, 25, -26.5, -29.75, 25, -63.75, 17.75, 25, -63.75, -29.75, 25, -26.5, 17.75, 25, -26.5, 17.75, 12.5, -26.5, -29.75, 25, -26.5, 17.75, 12.5, -26.5, -29.75, 12.5, -26.5, -29.75, 25, -63.75, -29.75, 25, -26.5, -29.75, 12.5, -26.5, -29.75, 25, -63.75, -29.75, 12.5, -26.5, -29.75, 12.5, -63.75, 17.75, 12.5, -63.75, -29.75, 12.5, -63.75, -29.75, 12.5, -26.5, 17.75, 12.5, -63.75, -29.75, 12.5, -26.5, 17.75, 12.5, -26.5, 17.75, 25, -63.75, -29.75, 25, -63.75, -29.75, 12.5, -63.75, 17.75, 25, -63.75, -29.75, 12.5, -63.75, 17.75, 12.5, -63.75, 19.25, 18, 23.25, 19.25, 18, -29.25, 19.25, 1, -29.25, 19.25, 18, 23.25, 19.25, 1, -29.25, 19.25, 1, 23.25, 19.25, 18, 23.25, 16.75, 18, 23.25, 16.75, 18, -29.25, 19.25, 18, 23.25, 16.75, 18, -29.25, 19.25, 18, -29.25, 16.75, 18, 23.25, 19.25, 18, 23.25, 19.25, 1, 23.25, 16.75, 18, 23.25, 19.25, 1, 23.25, 16.75, 1, 23.25, 16.75, 18, -29.25, 16.75, 18, 23.25, 16.75, 1, 23.25, 16.75, 18, -29.25, 16.75, 1, 23.25, 16.75, 1, -29.25, 19.25, 1, -29.25, 16.75, 1, -29.25, 16.75, 1, 23.25, 19.25, 1, -29.25, 16.75, 1, 23.25, 19.25, 1, 23.25, 19.25, 18, -29.25, 16.75, 18, -29.25, 16.75, 1, -29.25, 19.25, 18, -29.25, 16.75, 1, -29.25, 19.25, 1, -29.25, 4, 12.75, -26.5, 4, 12.75, -63.75, 4, 4.5, -63.75, 4, 12.75, -26.5, 4, 4.5, -63.75, 4, 4.5, -26.5, 4, 12.75, -26.5, -16, 12.75, -26.5, -16, 12.75, -63.75, 4, 12.75, -26.5, -16, 12.75, -63.75, 4, 12.75, -63.75, -16, 12.75, -26.5, 4, 12.75, -26.5, 4, 4.5, -26.5, -16, 12.75, -26.5, 4, 4.5, -26.5, -16, 4.5, -26.5, -16, 12.75, -63.75, -16, 12.75, -26.5, -16, 4.5, -26.5, -16, 12.75, -63.75, -16, 4.5, -26.5, -16, 4.5, -63.75, 4, 4.5, -63.75, -16, 4.5, -63.75, -16, 4.5, -26.5, 4, 4.5, -63.75, -16, 4.5, -26.5, 4, 4.5, -26.5, 4, 12.75, -63.75, -16, 12.75, -63.75, -16, 4.5, -63.75, 4, 12.75, -63.75, -16, 4.5, -63.75, 4, 4.5, -63.75, 17.75, 16.5, 26, 17.75, 16.5, -29.25, 17.75, 15.5, -29.25, 17.75, 16.5, 26, 17.75, 15.5, -29.25, 17.75, 15.5, 26, 17.75, 16.5, 26, -29.75, 16.5, 26, -29.75, 16.5, -29.25, 17.75, 16.5, 26, -29.75, 16.5, -29.25, 17.75, 16.5, -29.25, -29.75, 16.5, 26, 17.75, 16.5, 26, 17.75, 15.5, 26, -29.75, 16.5, 26, 17.75, 15.5, 26, -29.75, 15.5, 26, -29.75, 16.5, -29.25, -29.75, 16.5, 26, -29.75, 15.5, 26, -29.75, 16.5, -29.25, -29.75, 15.5, 26, -29.75, 15.5, -29.25, 17.75, 15.5, -29.25, -29.75, 15.5, -29.25, -29.75, 15.5, 26, 17.75, 15.5, -29.25, -29.75, 15.5, 26, 17.75, 15.5, 26, 17.75, 16.5, -29.25, -29.75, 16.5, -29.25, -29.75, 15.5, -29.25, 17.75, 16.5, -29.25, -29.75, 15.5, -29.25, 17.75, 15.5, -29.25, 43.25, 25, -60.25, 43.25, 25, -104.75, 43.25, 4.5, -104.75, 43.25, 25, -60.25, 43.25, 4.5, -104.75, 43.25, 4.5, -60.25, 43.25, 25, -60.25, 40.25, 25, -60.25, 40.25, 25, -104.75, 43.25, 25, -60.25, 40.25, 25, -104.75, 43.25, 25, -104.75, 40.25, 25, -60.25, 43.25, 25, -60.25, 43.25, 4.5, -60.25, 40.25, 25, -60.25, 43.25, 4.5, -60.25, 40.25, 4.5, -60.25, 40.25, 25, -104.75, 40.25, 25, -60.25, 40.25, 4.5, -60.25, 40.25, 25, -104.75, 40.25, 4.5, -60.25, 40.25, 4.5, -104.75, 43.25, 4.5, -104.75, 40.25, 4.5, -104.75, 40.25, 4.5, -60.25, 43.25, 4.5, -104.75, 40.25, 4.5, -60.25, 43.25, 4.5, -60.25, 43.25, 25, -104.75, 40.25, 25, -104.75, 40.25, 4.5, -104.75, 43.25, 25, -104.75, 40.25, 4.5, -104.75, 43.25, 4.5, -104.75, -51, 25, -60.25, -51, 25, -147.25, -51, 4.5, -147.25, -51, 25, -60.25, -51, 4.5, -147.25, -51, 4.5, -60.25, -51, 25, -60.25, -54, 25, -60.25, -54, 25, -147.25, -51, 25, -60.25, -54, 25, -147.25, -51, 25, -147.25, -54, 25, -60.25, -51, 25, -60.25, -51, 4.5, -60.25, -54, 25, -60.25, -51, 4.5, -60.25, -54, 4.5, -60.25, -54, 25, -147.25, -54, 25, -60.25, -54, 4.5, -60.25, -54, 25, -147.25, -54, 4.5, -60.25, -54, 4.5, -147.25, -51, 4.5, -147.25, -54, 4.5, -147.25, -54, 4.5, -60.25, -51, 4.5, -147.25, -54, 4.5, -60.25, -51, 4.5, -60.25, -51, 25, -147.25, -54, 25, -147.25, -54, 4.5, -147.25, -51, 25, -147.25, -54, 4.5, -147.25, -51, 4.5, -147.25, 60.25, 25, -103, 60.25, 25, -105.5, 60.25, 4.5, -105.5, 60.25, 25, -103, 60.25, 4.5, -105.5, 60.25, 4.5, -103, 60.25, 25, -103, -18, 25, -103, -18, 25, -105.5, 60.25, 25, -103, -18, 25, -105.5, 60.25, 25, -105.5, -18, 25, -103, 60.25, 25, -103, 60.25, 4.5, -103, -18, 25, -103, 60.25, 4.5, -103, -18, 4.5, -103, -18, 25, -105.5, -18, 25, -103, -18, 4.5, -103, -18, 25, -105.5, -18, 4.5, -103, -18, 4.5, -105.5, 60.25, 4.5, -105.5, -18, 4.5, -105.5, -18, 4.5, -103, 60.25, 4.5, -105.5, -18, 4.5, -103, 60.25, 4.5, -103, 60.25, 25, -105.5, -18, 25, -105.5, -18, 4.5, -105.5, 60.25, 25, -105.5, -18, 4.5, -105.5, 60.25, 4.5, -105.5, -29.75, 25, -60.25, -29.75, 25, -64, -29.75, 4.5, -64, -29.75, 25, -60.25, -29.75, 4.5, -64, -29.75, 4.5, -60.25, -29.75, 25, -60.25, -54, 25, -60.25, -54, 25, -64, -29.75, 25, -60.25, -54, 25, -64, -29.75, 25, -64, -54, 25, -60.25, -29.75, 25, -60.25, -29.75, 4.5, -60.25, -54, 25, -60.25, -29.75, 4.5, -60.25, -54, 4.5, -60.25, -54, 25, -64, -54, 25, -60.25, -54, 4.5, -60.25, -54, 25, -64, -54, 4.5, -60.25, -54, 4.5, -64, -29.75, 4.5, -64, -54, 4.5, -64, -54, 4.5, -60.25, -29.75, 4.5, -64, -54, 4.5, -60.25, -29.75, 4.5, -60.25, -29.75, 25, -64, -54, 25, -64, -54, 4.5, -64, -29.75, 25, -64, -54, 4.5, -64, -29.75, 4.5, -64, 41.75, 25, -60.25, 41.75, 25, -175, 41.75, 24.75, -175, 41.75, 25, -60.25, 41.75, 24.75, -175, 41.75, 24.75, -60.25, 41.75, 25, -60.25, -72, 25, -60.25, -72, 25, -175, 41.75, 25, -60.25, -72, 25, -175, 41.75, 25, -175, -72, 25, -60.25, 41.75, 25, -60.25, 41.75, 24.75, -60.25, -72, 25, -60.25, 41.75, 24.75, -60.25, -72, 24.75, -60.25, -72, 25, -175, -72, 25, -60.25, -72, 24.75, -60.25, -72, 25, -175, -72, 24.75, -60.25, -72, 24.75, -175, 41.75, 24.75, -175, -72, 24.75, -175, -72, 24.75, -60.25, 41.75, 24.75, -175, -72, 24.75, -60.25, 41.75, 24.75, -60.25, 41.75, 25, -175, -72, 25, -175, -72, 24.75, -175, 41.75, 25, -175, -72, 24.75, -175, 41.75, 24.75, -175, 60.5, 25, -155.25, 60.5, 25, -157.25, 60.5, 4.5, -157.25, 60.5, 25, -155.25, 60.5, 4.5, -157.25, 60.5, 4.5, -155.25, 60.5, 25, -155.25, 35.5, 25, -155.25, 35.5, 25, -157.25, 60.5, 25, -155.25, 35.5, 25, -157.25, 60.5, 25, -157.25, 35.5, 25, -155.25, 60.5, 25, -155.25, 60.5, 4.5, -155.25, 35.5, 25, -155.25, 60.5, 4.5, -155.25, 35.5, 4.5, -155.25, 35.5, 25, -157.25, 35.5, 25, -155.25, 35.5, 4.5, -155.25, 35.5, 25, -157.25, 35.5, 4.5, -155.25, 35.5, 4.5, -157.25, 60.5, 4.5, -157.25, 35.5, 4.5, -157.25, 35.5, 4.5, -155.25, 60.5, 4.5, -157.25, 35.5, 4.5, -155.25, 60.5, 4.5, -155.25, 60.5, 25, -157.25, 35.5, 25, -157.25, 35.5, 4.5, -157.25, 60.5, 25, -157.25, 35.5, 4.5, -157.25, 60.5, 4.5, -157.25, 64.75, 5, -99, 64.75, 5, -160.75, 64.75, 1, -160.75, 64.75, 5, -99, 64.75, 1, -160.75, 64.75, 1, -99, 64.75, 5, -99, 41.75, 5, -99, 41.75, 5, -160.75, 64.75, 5, -99, 41.75, 5, -160.75, 64.75, 5, -160.75, 41.75, 5, -99, 64.75, 5, -99, 64.75, 1, -99, 41.75, 5, -99, 64.75, 1, -99, 41.75, 1, -99, 41.75, 5, -160.75, 41.75, 5, -99, 41.75, 1, -99, 41.75, 5, -160.75, 41.75, 1, -99, 41.75, 1, -160.75, 64.75, 1, -160.75, 41.75, 1, -160.75, 41.75, 1, -99, 64.75, 1, -160.75, 41.75, 1, -99, 64.75, 1, -99, 64.75, 5, -160.75, 41.75, 5, -160.75, 41.75, 1, -160.75, 64.75, 5, -160.75, 41.75, 1, -160.75, 64.75, 1, -160.75, 42, 25, -60.25, 42, 25, -64, 42, 4.5, -64, 42, 25, -60.25, 42, 4.5, -64, 42, 4.5, -60.25, 42, 25, -60.25, 17.75, 25, -60.25, 17.75, 25, -64, 42, 25, -60.25, 17.75, 25, -64, 42, 25, -64, 17.75, 25, -60.25, 42, 25, -60.25, 42, 4.5, -60.25, 17.75, 25, -60.25, 42, 4.5, -60.25, 17.75, 4.5, -60.25, 17.75, 25, -64, 17.75, 25, -60.25, 17.75, 4.5, -60.25, 17.75, 25, -64, 17.75, 4.5, -60.25, 17.75, 4.5, -64, 42, 4.5, -64, 17.75, 4.5, -64, 17.75, 4.5, -60.25, 42, 4.5, -64, 17.75, 4.5, -60.25, 42, 4.5, -60.25, 42, 25, -64, 17.75, 25, -64, 17.75, 4.5, -64, 42, 25, -64, 17.75, 4.5, -64, 42, 4.5, -64, 41.75, 25, -129.25, 41.75, 25, -157.25, 41.75, 4.5, -157.25, 41.75, 25, -129.25, 41.75, 4.5, -157.25, 41.75, 4.5, -129.25, 41.75, 25, -129.25, 35.5, 25, -129.25, 35.5, 25, -157.25, 41.75, 25, -129.25, 35.5, 25, -157.25, 41.75, 25, -157.25, 35.5, 25, -129.25, 41.75, 25, -129.25, 41.75, 4.5, -129.25, 35.5, 25, -129.25, 41.75, 4.5, -129.25, 35.5, 4.5, -129.25, 35.5, 25, -157.25, 35.5, 25, -129.25, 35.5, 4.5, -129.25, 35.5, 25, -157.25, 35.5, 4.5, -129.25, 35.5, 4.5, -157.25, 41.75, 4.5, -157.25, 35.5, 4.5, -157.25, 35.5, 4.5, -129.25, 41.75, 4.5, -157.25, 35.5, 4.5, -129.25, 41.75, 4.5, -129.25, 41.75, 25, -157.25, 35.5, 25, -157.25, 35.5, 4.5, -157.25, 41.75, 25, -157.25, 35.5, 4.5, -157.25, 41.75, 4.5, -157.25 )
+
+[sub_resource type="SpatialMaterial" id=7]
+albedo_color = Color( 0, 0.27451, 0.352941, 1 )
+
+[sub_resource type="BoxShape" id=8]
+
+[sub_resource type="SpatialMaterial" id=12]
+albedo_color = Color( 0.588235, 0.588235, 0, 1 )
+
+[sub_resource type="ViewportTexture" id=9]
+viewport_path = NodePath("Text/Clock/Viewport")
+
+[sub_resource type="ViewportTexture" id=10]
+viewport_path = NodePath("Text/Power/Viewport")
+
+[sub_resource type="ViewportTexture" id=11]
+viewport_path = NodePath("Text/Usage/Viewport")
+
+[sub_resource type="ViewportTexture" id=18]
+viewport_path = NodePath("Text/AgroMeter/Viewport")
+
+[sub_resource type="SpatialMaterial" id=15]
+
+[sub_resource type="Animation" id=16]
+resource_name = "Jumpscare"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.4 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( 81.5, -2.25, 32.25 ), Vector3( 81.5, -2, 33 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( 10, 3.01087e-07, 1.73389e-06 ), Vector3( 10, 3.00511e-07, 25 ), Vector3( 10, 0, 0 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("JumpscareLight:light_specular")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 16.0 ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("JumpscareLight:light_energy")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 1.0 ]
+}
+
+[sub_resource type="Animation" id=17]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 4.46354, 0, -1.6246 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 10, 0, 0 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("JumpscareLight:light_specular")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 16.0 ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("JumpscareLight:light_energy")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
+
+[sub_resource type="Animation" id=19]
+resource_name = "Jumpscare"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.3 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( 86.75, -0.5, 34 ), Vector3( 83.0694, -2, 31.875 ), Vector3( 82.3062, -1.94889, 33.2234 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1, 0.3, 0.8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, -30, 0 ), Vector3( 0, -15, 0 ), Vector3( -4.41946e-07, -15, -15 ), Vector3( -5.03923e-07, -15, 5 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("JumpscareLight:light_energy")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 1.0 ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("JumpscareLight:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+
+[sub_resource type="Animation" id=20]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 84.5, -0.5, 33.5 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 0, -30, 0 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("JumpscareLight:light_energy")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 1.0 ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("JumpscareLight:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
+
+[sub_resource type="Animation" id=21]
+resource_name = "Jumpscare"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( 81.5, -0.5, 27.5 ), Vector3( 81.5, -0.5, 28.75 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.3, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( 7.54636e-07, 90, 45 ), Vector3( 3.14491e-06, 90, 30 ), Vector3( 6.21762e-07, 90, 45 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("JumpscareLight:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+
+[sub_resource type="Animation" id=22]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 81.5, 0.5, 52 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 7.54636e-07, -90, 45 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("JumpscareLight:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
+
+[sub_resource type="SpatialMaterial" id=23]
+albedo_color = Color( 0.0392157, 0.0392157, 0.0392157, 1 )
+
+[node name="Main" type="Spatial"]
+script = ExtResource( 8 )
+
+[node name="World" type="WorldEnvironment" parent="."]
+environment = SubResource( 3 )
+
+[node name="Camera" type="Spatial" parent="."]
+
+[node name="CameraHolder" type="CSGBox" parent="Camera"]
+transform = Transform( 1.52947, 0, 0, 0, 0.333476, -0.235877, 0, 0.0724291, 1.08602, 82.2682, -2.5244, 31.5169 )
+material = SubResource( 4 )
+script = ExtResource( 3 )
+
+[node name="CamArea" type="Area" parent="Camera/CameraHolder"]
+
+[node name="CameraCollider" type="CollisionShape" parent="Camera/CameraHolder/CamArea"]
+transform = Transform( 1, 0, 0, 0, 1, -5.96046e-08, 0, -7.45058e-09, 1, 0, 0, 0 )
+shape = SubResource( 5 )
+
+[node name="CameraSystem" type="Spatial" parent="Camera"]
+
+[node name="Cam-1" type="Camera" parent="Camera/CameraSystem"]
+transform = Transform( 0.591672, -0.348981, 0.72673, 0.113538, 0.928537, 0.353452, -0.798144, -0.126616, 0.589012, 94.3273, 7.91414, 9.79049 )
+
+[node name="Cam-2" type="Camera" parent="Camera/CameraSystem"]
+transform = Transform( 0.958672, -0.00897539, -0.284372, 0.113538, 0.928537, 0.353452, 0.260877, -0.371132, 0.891181, 72.2201, 2.49685, 28.2208 )
+current = true
+
+[node name="Cam-3" type="Camera" parent="Camera/CameraSystem"]
+transform = Transform( -0.965296, 0.0188815, 0.260475, 0.113538, 0.928537, 0.353452, -0.235187, 0.37076, -0.898457, 91.5431, 2.49685, 11.6877 )
+
+[node name="Cam-4" type="Camera" parent="Camera/CameraSystem"]
+transform = Transform( -0.525239, 0.265032, -0.80863, 0.0616583, 0.959617, 0.274469, 0.848718, 0.0943032, -0.520369, 76.1079, 8.85928, -26.1216 )
+
+[node name="Cam-5" type="Camera" parent="Camera/CameraSystem"]
+transform = Transform( -0.634314, 0.249991, -0.73154, 0.0616583, 0.959617, 0.274469, 0.770613, 0.128994, -0.624112, 109.418, 7.62275, -38.2128 )
+
+[node name="Cam-6" type="Camera" parent="Camera/CameraSystem"]
+transform = Transform( -0.767649, -0.130158, 0.627515, 0.0616583, 0.959617, 0.274469, -0.637898, 0.249387, -0.728623, 75.1192, 9.33087, -49.0158 )
+
+[node name="Cam-7" type="Camera" parent="Camera/CameraSystem"]
+transform = Transform( -0.767649, -0.130158, 0.627514, 0.0616583, 0.959617, 0.274469, -0.637898, 0.249387, -0.728624, 53.0806, 6.9383, -80.9377 )
+
+[node name="Cam-8" type="Camera" parent="Camera/CameraSystem"]
+transform = Transform( -0.767649, -0.130158, 0.627514, 0.528291, 0.425788, 0.734583, -0.3628, 0.895412, -0.258095, 27.3306, 7.4383, -79.4377 )
+
+[node name="CameraEffects" type="Node2D" parent="Camera"]
+
+[node name="Vignette" type="CanvasLayer" parent="Camera/CameraEffects"]
+
+[node name="Vignette" type="ColorRect" parent="Camera/CameraEffects/Vignette"]
+material = SubResource( 14 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 1.0
+margin_right = 1.0
+mouse_filter = 2
+color = Color( 0, 0, 0, 1 )
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="lblCamPos" type="Label" parent="Camera/CameraEffects"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 298.0
+margin_top = 364.0
+margin_right = 345.0
+margin_bottom = 383.0
+rect_scale = Vector2( 10, 10 )
+rect_clip_content = true
+text = "0"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CamBlock" type="CanvasLayer" parent="Camera/CameraEffects"]
+
+[node name="CamBlock" type="ColorRect" parent="Camera/CameraEffects/CamBlock"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Restart" type="CanvasLayer" parent="Camera/CameraEffects"]
+
+[node name="Button" type="Button" parent="Camera/CameraEffects/Restart"]
+margin_left = 616.0
+margin_top = 442.0
+margin_right = 678.0
+margin_bottom = 462.0
+rect_scale = Vector2( 1.25, 2 )
+text = "RESET"
+script = ExtResource( 25 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Report" type="CanvasLayer" parent="Camera/CameraEffects"]
+
+[node name="Button" type="Button" parent="Camera/CameraEffects/Report"]
+margin_left = 616.0
+margin_top = 442.0
+margin_right = 680.0
+margin_bottom = 462.0
+rect_scale = Vector2( 1.25, 2 )
+text = "REPORT"
+script = ExtResource( 38 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CameraSwap" type="AudioStreamPlayer" parent="Camera"]
+stream = ExtResource( 14 )
+volume_db = -7.5
+
+[node name="CameraOpen" type="AudioStreamPlayer" parent="Camera"]
+stream = ExtResource( 19 )
+volume_db = -5.0
+
+[node name="CameraClose" type="AudioStreamPlayer" parent="Camera"]
+stream = ExtResource( 20 )
+volume_db = -5.0
+
+[node name="Map" type="MeshInstance" parent="."]
+transform = Transform( 0.55445, 0, 0, 0, 0.55445, 0, 0, 0, 0.55445, 85.3905, -3.95668, 45.2895 )
+mesh = ExtResource( 4 )
+
+[node name="StaticBody" type="StaticBody" parent="Map"]
+
+[node name="CollisionShape" type="CollisionShape" parent="Map/StaticBody"]
+shape = SubResource( 6 )
+
+[node name="Lights" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 81.9857, -1.86288, 35.2079 )
+
+[node name="CamLights" type="Spatial" parent="Lights"]
+
+[node name="Cam-1" type="OmniLight" parent="Lights/CamLights"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.52479, 3.98155, -34.1583 )
+light_color = Color( 0.784314, 0.784314, 0.784314, 1 )
+light_energy = 16.0
+light_indirect_energy = 0.0
+light_specular = 0.1
+omni_range = 16.227
+omni_attenuation = 1.25
+
+[node name="Cam-2" type="OmniLight" parent="Lights/CamLights"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8.47888, 3.98155, -16.1605 )
+light_color = Color( 0.784314, 0.784314, 0.784314, 1 )
+light_energy = 16.0
+light_indirect_energy = 0.0
+light_specular = 0.0
+omni_range = 5.322
+script = ExtResource( 7 )
+
+[node name="Cam-3" type="OmniLight" parent="Lights/CamLights"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.15476, 3.98155, -18.7846 )
+light_color = Color( 0.784314, 0.784314, 0.784314, 1 )
+light_energy = 16.0
+light_indirect_energy = 0.0
+light_specular = 0.0
+omni_range = 5.322
+script = ExtResource( 7 )
+
+[node name="Cam-4" type="SpotLight" parent="Lights/CamLights"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 8.41632, 11.5998, -55.4031 )
+spot_range = 62.861
+
+[node name="Cam-5" type="SpotLight" parent="Lights/CamLights"]
+transform = Transform( 1, 0, 0, 0, 0.598269, 0.801296, 0, -0.801296, 0.598269, 29.9554, 11.1904, -48.8912 )
+light_energy = 5.174
+spot_range = 30.497
+
+[node name="Cam-6" type="SpotLight" parent="Lights/CamLights"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -17.133, 11.1904, -77.4227 )
+light_energy = 5.174
+spot_range = 47.927
+spot_angle = 66.52
+
+[node name="Cam-7" type="SpotLight" parent="Lights/CamLights"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -32.133, 33.1904, -111.423 )
+light_energy = 0.5
+spot_range = 47.927
+spot_angle = 36.83
+
+[node name="Cam-8" type="SpotLight" parent="Lights/CamLights"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -60.133, 33.1904, -111.423 )
+spot_range = 47.927
+spot_angle = 36.83
+
+[node name="OfficeLight" type="OmniLight" parent="Lights"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0883179, 3.16889, -2.80429 )
+light_color = Color( 0.588235, 0.588235, 0.588235, 1 )
+light_energy = 16.0
+light_indirect_energy = 0.0
+shadow_enabled = true
+omni_range = 7.5
+script = ExtResource( 2 )
+
+[node name="BackLight" type="OmniLight" parent="Lights"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0883179, 3.16889, 8.32197 )
+light_color = Color( 0.392157, 0.392157, 0.392157, 1 )
+light_energy = 16.0
+light_indirect_energy = 0.0
+light_specular = 1.0
+omni_range = 7.5
+script = ExtResource( 7 )
+
+[node name="Buttons" type="Spatial" parent="."]
+
+[node name="LeftLight" type="CSGBox" parent="Buttons"]
+transform = Transform( 0.520282, 0, 0, 0, 0.49342, 0, 0, 0, 0.396142, 77.995, -0.78475, 30.481 )
+material = SubResource( 7 )
+script = ExtResource( 6 )
+
+[node name="LightArea" type="Area" parent="Buttons/LeftLight"]
+
+[node name="CollisionShape" type="CollisionShape" parent="Buttons/LeftLight/LightArea"]
+shape = SubResource( 8 )
+
+[node name="RightLight" type="CSGBox" parent="Buttons"]
+transform = Transform( 0.520282, 0, 0, 0, 0.49342, 0, 0, 0, 0.396142, 86.1644, -0.78475, 30.481 )
+material = SubResource( 7 )
+script = ExtResource( 6 )
+
+[node name="RightArea" type="Area" parent="Buttons/RightLight"]
+
+[node name="CollisionShape" type="CollisionShape" parent="Buttons/RightLight/RightArea"]
+shape = SubResource( 8 )
+
+[node name="RightShock" type="CSGBox" parent="Buttons"]
+transform = Transform( 0.520282, 0, 0, 0, 0.49342, 0, 0, 0, 0.396142, 86.1644, 1.13834, 30.481 )
+material = SubResource( 12 )
+script = ExtResource( 13 )
+
+[node name="RightArea" type="Area" parent="Buttons/RightShock"]
+
+[node name="CollisionShape" type="CollisionShape" parent="Buttons/RightShock/RightArea"]
+shape = SubResource( 8 )
+
+[node name="LeftShock" type="CSGBox" parent="Buttons"]
+transform = Transform( 0.520282, 0, 0, 0, 0.49342, 0, 0, 0, 0.396142, 77.995, 1.138, 30.481 )
+material = SubResource( 12 )
+script = ExtResource( 13 )
+
+[node name="RightArea" type="Area" parent="Buttons/LeftShock"]
+
+[node name="CollisionShape" type="CollisionShape" parent="Buttons/LeftShock/RightArea"]
+shape = SubResource( 8 )
+
+[node name="Lights" type="Spatial" parent="Buttons"]
+
+[node name="LeftVent" type="OmniLight" parent="Buttons/Lights"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 73.8245, 1.14227, 27.7149 )
+visible = false
+light_color = Color( 1, 1, 0, 1 )
+script = ExtResource( 18 )
+
+[node name="LightBuzz" type="AudioStreamPlayer3D" parent="Buttons/Lights/LeftVent"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6287, 0, 0 )
+stream = ExtResource( 15 )
+unit_db = 80.0
+unit_size = 100.0
+max_db = 6.0
+
+[node name="RightVent" type="OmniLight" parent="Buttons/Lights"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 89.8906, 1.14227, 27.7149 )
+visible = false
+light_color = Color( 1, 1, 0, 1 )
+script = ExtResource( 18 )
+
+[node name="LightBuzz" type="AudioStreamPlayer3D" parent="Buttons/Lights/RightVent"]
+stream = ExtResource( 15 )
+unit_db = 80.0
+unit_size = 100.0
+max_db = 6.0
+
+[node name="Text" type="Spatial" parent="."]
+
+[node name="Clock" type="Sprite3D" parent="Text"]
+transform = Transform( 3.1068, 0, 0, 0, 3.1068, 0, 0, 0, 3.1068, 82.2641, 0.185778, 30.8244 )
+texture = SubResource( 9 )
+
+[node name="Viewport" type="Viewport" parent="Text/Clock"]
+size = Vector2( 49, 14 )
+transparent_bg = true
+render_target_v_flip = true
+script = ExtResource( 9 )
+
+[node name="lblClock" type="Label" parent="Text/Clock/Viewport"]
+margin_right = 40.0
+margin_bottom = 14.0
+text = "12 A.M."
+script = ExtResource( 10 )
+
+[node name="Power" type="Sprite3D" parent="Text"]
+transform = Transform( 2.25711, 0, 0, 0, 2.25711, 0, 0, 0, 2.25711, 82.3134, -0.854219, 30.7381 )
+texture = SubResource( 10 )
+
+[node name="Viewport" type="Viewport" parent="Text/Power"]
+size = Vector2( 40, 14 )
+transparent_bg = true
+render_target_v_flip = true
+script = ExtResource( 9 )
+
+[node name="lblPower" type="Label" parent="Text/Power/Viewport"]
+margin_right = 40.0
+margin_bottom = 14.0
+text = "100%"
+script = ExtResource( 11 )
+
+[node name="Usage" type="Sprite3D" parent="Text"]
+transform = Transform( 2.54845, 0, 0, 0, 2.25711, 0, 0, 0, 2.25711, 82.3529, -1.52715, 30.7381 )
+texture = SubResource( 11 )
+
+[node name="Viewport" type="Viewport" parent="Text/Usage"]
+size = Vector2( 95, 14 )
+transparent_bg = true
+render_target_v_flip = true
+script = ExtResource( 9 )
+
+[node name="lblUsage" type="Label" parent="Text/Usage/Viewport"]
+margin_right = 40.0
+margin_bottom = 14.0
+text = "1.6 | 0.000001"
+script = ExtResource( 12 )
+
+[node name="AgroMeter" type="Spatial" parent="Text"]
+
+[node name="Viewport" type="Viewport" parent="Text/AgroMeter"]
+size = Vector2( 100, 20 )
+transparent_bg = true
+
+[node name="lblAgro" type="Label" parent="Text/AgroMeter/Viewport"]
+margin_right = 40.0
+margin_bottom = 14.0
+text = "Danger: 0"
+align = 1
+valign = 1
+script = ExtResource( 23 )
+
+[node name="AgroMeterSprite" type="Sprite3D" parent="Text/AgroMeter"]
+transform = Transform( -3.35, 0, -5.05836e-07, 0, 3.35, 0, 5.05836e-07, 0, -3.35, 83.25, 0, 40.5 )
+flip_v = true
+texture = SubResource( 18 )
+
+[node name="Animatronics" type="Spatial" parent="."]
+script = ExtResource( 16 )
+
+[node name="CSGBox" type="CSGBox" parent="Animatronics"]
+transform = Transform( 1, 0, 0, 0, 1.47422, 0, 0, 0, 1, 0, 0, 0 )
+material = SubResource( 15 )
+
+[node name="BabyBunny" type="Spatial" parent="Animatronics"]
+
+[node name="BabyBunny" type="MeshInstance" parent="Animatronics/BabyBunny"]
+transform = Transform( 0.6, 0, 0, 0, 0.590885, -0.104189, 0, 0.104189, 0.590885, 4.46354, 0, -1.6246 )
+mesh = ExtResource( 21 )
+skeleton = NodePath("../../..")
+script = ExtResource( 17 )
+
+[node name="Jumpscare" type="AnimationPlayer" parent="Animatronics/BabyBunny/BabyBunny"]
+anims/Jumpscare = SubResource( 16 )
+anims/RESET = SubResource( 17 )
+
+[node name="JumpscareLight" type="OmniLight" parent="Animatronics/BabyBunny/BabyBunny"]
+transform = Transform( 1.66667, 0, 0, 0, 1.66667, 8.94068e-08, 0, -8.94068e-08, 1.66667, 0, 9.53674e-07, 4.99999 )
+light_energy = 0.0
+light_specular = 16.0
+
+[node name="6" type="Position3D" parent="Animatronics/BabyBunny"]
+transform = Transform( 1, 0, 0, 1.86265e-09, 1.47422, 0, 0, 0, 1, 53.247, 1.80703, -43.9173 )
+
+[node name="61" type="Position3D" parent="Animatronics/BabyBunny"]
+transform = Transform( 0.589929, 0, 0.807455, 3.72529e-09, 1.47422, 0, -0.807455, 0, 0.589929, 66.6721, 1.80703, -23.3665 )
+
+[node name="4" type="Position3D" parent="Animatronics/BabyBunny"]
+transform = Transform( 1, 0, 0, 1.86265e-09, 1.47422, 0, 0, 0, 1, 82.3265, 1.97947, -21.215 )
+
+[node name="41" type="Position3D" parent="Animatronics/BabyBunny"]
+transform = Transform( 0.0871558, -2.74595e-09, 0.996195, 1.6234e-10, 1.47422, 1.85556e-09, -0.996195, 0, 0.0871558, 95.1295, 1.97947, -21.215 )
+
+[node name="42" type="Position3D" parent="Animatronics/BabyBunny"]
+transform = Transform( 0.0871558, -2.74595e-09, -0.996195, 1.6234e-10, 1.47422, -1.85556e-09, 0.996195, 0, 0.0871558, 86.7051, 1.97947, -16.5446 )
+
+[node name="5" type="Position3D" parent="Animatronics/BabyBunny"]
+transform = Transform( 1, 0, 0, 1.86265e-09, 1.47422, 0, 0, 0, 1, 112.64, 2.70374, -29.858 )
+
+[node name="1" type="Position3D" parent="Animatronics/BabyBunny"]
+transform = Transform( 1, 0, 0, 1.86265e-09, 1.47422, 0, 0, 0, 1, 79.9776, 2.61059, -10.2942 )
+
+[node name="11" type="Position3D" parent="Animatronics/BabyBunny"]
+transform = Transform( 1, 0, 0, 1.86265e-09, 1.47422, 0, 0, 0, 1, 79.0131, 2.11059, 3.49791 )
+
+[node name="2" type="Position3D" parent="Animatronics/BabyBunny"]
+transform = Transform( 1, -2.98023e-08, 0, 1.86265e-09, -0.0262177, -1.47399, 0, 0.999842, -0.0177841, 74.2041, 0.581751, 13.7194 )
+
+[node name="Entry" type="Position3D" parent="Animatronics/BabyBunny"]
+transform = Transform( 1, -1.49012e-08, 0, 1.86265e-09, 1.06775, -1.01648, 0, 0.689506, 0.72428, 74.8077, 0.866302, 28.046 )
+
+[node name="Brownie" type="Spatial" parent="Animatronics"]
+
+[node name="Brownie" type="MeshInstance" parent="Animatronics/Brownie"]
+transform = Transform( 0.545596, 0, -0.315, 0, 0.63, 0, 0.315, 0, 0.545596, 84.5, -0.5, 33.5 )
+mesh = ExtResource( 28 )
+skeleton = NodePath("../../../Audio/Ambience1")
+script = ExtResource( 29 )
+
+[node name="Jumpscare" type="AnimationPlayer" parent="Animatronics/Brownie/Brownie"]
+anims/Jumpscare = SubResource( 19 )
+anims/RESET = SubResource( 20 )
+
+[node name="JumpscareLight" type="OmniLight" parent="Animatronics/Brownie/Brownie"]
+transform = Transform( 1.5873, 0, 0, 0, 1.5873, 0, 0, 0, 1.5873, 0, 1.19048, 4.36508 )
+visible = false
+light_specular = 5.0
+
+[node name="5" type="Position3D" parent="Animatronics/Brownie"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 114.5, 2.75, -17.5 )
+
+[node name="4" type="Position3D" parent="Animatronics/Brownie"]
+transform = Transform( -0.0871558, 0, -0.996195, 0, 1, 0, 0.996195, 0, -0.0871558, 104.25, 2.25, -20.75 )
+
+[node name="41" type="Position3D" parent="Animatronics/Brownie"]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 91.25, 2.25, -19 )
+
+[node name="1" type="Position3D" parent="Animatronics/Brownie"]
+transform = Transform( 0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, 71.75, 1.25, -13.75 )
+
+[node name="11" type="Position3D" parent="Animatronics/Brownie"]
+transform = Transform( 0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, 0.422618, 77.75, 2.25, -5.25 )
+
+[node name="12" type="Position3D" parent="Animatronics/Brownie"]
+transform = Transform( 0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 85.5, 2.25, -4.25 )
+
+[node name="3" type="Position3D" parent="Animatronics/Brownie"]
+transform = Transform( 1, 0, 0, 0, 0.34202, -0.939693, 0, 0.939693, 0.34202, 90, 1.25, 12.25 )
+
+[node name="Entry" type="Position3D" parent="Animatronics/Brownie"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 90, 1.25, 26.25 )
+
+[node name="Rexy" type="Spatial" parent="Animatronics"]
+
+[node name="Rexy" type="MeshInstance" parent="Animatronics/Rexy"]
+transform = Transform( -2.41331e-08, 1.29572e-08, -0.6, 0.424264, 0.424264, -7.90253e-09, 0.424264, -0.424264, -2.62268e-08, 81.5, 0.5, 52 )
+mesh = ExtResource( 30 )
+skeleton = NodePath("../../..")
+script = ExtResource( 31 )
+
+[node name="Jumpscare" type="AnimationPlayer" parent="Animatronics/Rexy/Rexy"]
+anims/Jumpscare = SubResource( 21 )
+anims/RESET = SubResource( 22 )
+
+[node name="JumpscareLight" type="OmniLight" parent="Animatronics/Rexy/Rexy"]
+transform = Transform( 1.66667, 0, -1.42109e-14, 0, 1.66667, 1.42109e-14, -1.42109e-14, 5.68434e-14, 1.66667, -7.95494, 9.72272, -0.000106812 )
+visible = false
+light_specular = 13.3
+
+[node name="Start" type="Position3D" parent="Animatronics/Rexy"]
+transform = Transform( 1.49012e-08, -2.6077e-08, -0.6, 0.424264, 0.424264, -3.94805e-09, 0.424264, -0.424264, 1.86265e-08, 81.5, 0.5, 51 )
+
+[node name="Exploded" type="Spatial" parent="Animatronics"]
+
+[node name="Exploded" type="MeshInstance" parent="Animatronics/Exploded"]
+transform = Transform( 0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 133.25, 2.75, -46.75 )
+mesh = ExtResource( 32 )
+skeleton = NodePath("../../../Camera/CameraEffects/Restart/Button")
+script = ExtResource( 33 )
+
+[node name="Vent" type="Position3D" parent="Animatronics/Exploded"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 112.5, 6.52095, -37.5456 )
+
+[node name="Return" type="Position3D" parent="Animatronics/Exploded"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 23.25, 3.27095, -106.796 )
+
+[node name="Player" parent="." instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 81.6081, -2.38066, 36.343 )
+
+[node name="Audio" type="Spatial" parent="."]
+script = ExtResource( 37 )
+
+[node name="Jumpscare" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource( 22 )
+
+[node name="Jumpscare2" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource( 24 )
+pitch_scale = 1.47
+mix_target = 1
+
+[node name="Ambience1" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource( 26 )
+volume_db = 0.25
+pitch_scale = 0.75
+autoplay = true
+mix_target = 1
+
+[node name="Footsteps" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource( 27 )
+volume_db = 1.0
+pitch_scale = 0.25
+mix_target = 1
+
+[node name="VentEntry" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource( 34 )
+volume_db = 2.0
+pitch_scale = 0.25
+
+[node name="Message" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource( 35 )
+volume_db = -2.5
+bus = "Message"
+
+[node name="Ring" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource( 36 )
+
+[node name="Click" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource( 39 )
+
+[node name="Error" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource( 40 )
+volume_db = -5.0
+
+[node name="Room-7" type="CSGCombiner" parent="."]
+
+[node name="Room-7" type="CSGBox" parent="Room-7"]
+transform = Transform( 8, 0, 0, 0, 8, 0, 0, 0, 8, 47.75, 3.25, -75 )
+material = SubResource( 23 )
+
+[node name="Room-7-Sub" type="CSGBox" parent="Room-7/Room-7"]
+transform = Transform( 0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 0, 0 )
+operation = 2
+material = SubResource( 23 )
+
+[node name="Room-8" type="CSGCombiner" parent="."]
+
+[node name="Room-8" type="CSGBox" parent="Room-8"]
+transform = Transform( 8, 0, 0, 0, 8, 0, 0, 0, 8, 25.5, 3.25, -75 )
+material = SubResource( 23 )
+
+[node name="Room-8-Sub" type="CSGBox" parent="Room-8/Room-8"]
+transform = Transform( 0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 0, 0 )
+operation = 2
+material = SubResource( 23 )
+
+[connection signal="pressed" from="Camera/CameraEffects/Restart/Button" to="Camera/CameraEffects/Restart/Button" method="_on_Button_pressed"]
+[connection signal="pressed" from="Camera/CameraEffects/Report/Button" to="Camera/CameraEffects/Report/Button" method="_on_Button_pressed"]
+[connection signal="input_event" from="Buttons/LeftLight/LightArea" to="Buttons/LeftLight" method="_on_LightArea_input_event"]
+[connection signal="input_event" from="Buttons/RightLight/RightArea" to="Buttons/RightLight" method="_on_LightArea_input_event"]
+[connection signal="input_event" from="Buttons/RightShock/RightArea" to="Buttons/RightShock" method="_on_RightArea_input_event"]
+[connection signal="input_event" from="Buttons/LeftShock/RightArea" to="Buttons/LeftShock" method="_on_RightArea_input_event"]

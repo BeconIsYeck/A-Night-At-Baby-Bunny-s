@@ -1,0 +1,48 @@
+newmtl Part16Mtl
+Material Color
+Ka 0.00715504 0.018913 0.0315514
+Kd 0.00715504 0.018913 0.0315514
+Ks 0.000448943 0.0011867 0.0019797 
+
+d 1
+
+Ns 0
+
+newmtl Part1Mtl
+Material Color
+Ka 0.124741 0.113921 0.121986
+Kd 0.124741 0.113921 0.121986
+Ks 0.0278833 0.0254647 0.0272674 
+
+d 1
+
+Ns 255
+
+map_Ka Part1Tex.png
+map_Kd Part1Tex.png
+map_d Part1Tex.png
+
+newmtl Part2Mtl
+Material Color
+Ka 0.0915184 0.0511221 0.0328759
+Kd 0.0915184 0.0511221 0.0328759
+Ks 0.00574233 0.00320766 0.0020628 
+
+d 1
+
+Ns 0
+
+newmtl Part10Mtl
+Material Color
+Ka 0.14198 0.133209 0.106156
+Kd 0.14198 0.133209 0.106156
+Ks 0.0317368 0.029776 0.023729 
+
+d 1
+
+Ns 255
+
+map_Ka Part1Tex.png
+map_Kd Part1Tex.png
+map_d Part1Tex.png
+
